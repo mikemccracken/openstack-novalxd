@@ -7,7 +7,7 @@
 glance_status=$(unitStatus glance 0)
 while [ $glance_status != "active" ]
 do
-    exposeResult "Waiting for Glance..." 1 "false"
+    debug openstack "Waiting for Glance to be active"
     sleep 3
 done
 

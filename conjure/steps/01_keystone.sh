@@ -7,6 +7,6 @@
 keystone_status=$(unitStatus keystone 0)
 while [ $keystone_status != "active" ]
 do
-    exposeResult "Waiting for Keystone..." 1 "false"
+    debug openstack "Waiting on keystone to be active"
     sleep 3
 done

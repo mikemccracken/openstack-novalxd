@@ -16,4 +16,5 @@ if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
     fi
 
 fi
+
 exposeResult "Finished pre-processing..." 0 "true"
