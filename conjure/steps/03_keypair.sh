@@ -15,8 +15,7 @@ if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
     fi
     . $SCRIPTPATH/novarc
     if ! openstack keypair show ubuntu-keypair > /dev/null 2>&1; then
-        if ! openstack keypair create --public-key $HOME/.ssh/id_rsa.pub ubuntu-keypair > /dev/null 2>&1; then
-            exposeResult "Adding SSH Keypair..." 1 "false"
-        fi
+        while ! openstack keypair create --public-key $HOME/.ssh/id_rsa.pub ubuntu-keypair > /dev/null 2>&1; do sleep 5; done
+        exposeResult "Adding SSH Keypair..." 0 "true"
     fi
 fi

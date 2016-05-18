@@ -4,12 +4,11 @@
 
 . /usr/share/conjure-up/hooklib/common.sh
 
-glance_status=$(unitStatus glance 0)
-while [ $glance_status != "active" ]
-do
-    debug openstack "Waiting for Glance to be active"
-    sleep 3
-done
+check_glance() {
+    unitStatus glance 0
+}
+
+while [ $(check_glance) != "active" ]; do sleep 5; done
 
 if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
     imagetype=root.tar.xz
@@ -48,3 +47,5 @@ if ! glance image-list --property-filter name="xenial$imagesuffix" | grep -q "xe
            --property architecture="x86_64" \
            --visibility=public --file=$HOME/glance-images/xenial-server-cloudimg-amd64-$imagetype > /dev/null 2>&1
 fi
+
+exposeResult "Finished importing glance images" 0 "true"

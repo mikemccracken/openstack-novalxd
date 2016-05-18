@@ -5,10 +5,8 @@
 . /usr/share/conjure-up/hooklib/common.sh
 
 check_keystone() {
-    $(unitStatus keystone 0)
+    unitStatus keystone 0
 }
-while [ check_keystone != "active" ]
-do
-    debug openstack "Waiting on keystone to be active"
-    sleep 3
-done
+
+while [ $(check_keystone) != "active" ]; do sleep 5; done
+exposeResult "Keystone is active" 0 "true"
