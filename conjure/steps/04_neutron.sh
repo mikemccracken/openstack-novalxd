@@ -13,6 +13,7 @@ get_host_ns() {
     perl -lne 's/^nameserver\s+// or next; s/\s.*//; print && exit' /etc/resolv.conf
 }
 
+. $SCRIPTPATH/novarc
 if ! neutron net-show ext-net > /dev/null 2>&1; then
     debug openstack "adding ext-net"
     while ! neutron net-create --router:external ext-net > /dev/null 2>&1

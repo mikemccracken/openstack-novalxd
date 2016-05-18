@@ -4,6 +4,7 @@
 
 . /usr/share/conjure-up/hooklib/common.sh
 
+. $SCRIPTPATH/novarc
 if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
 
     if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
