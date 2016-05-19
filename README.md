@@ -5,7 +5,7 @@ openstack-novalxd
 # SYNOPSIS
 
 ```
-conjure-up battlemidget/openstack-novalxd
+conjure-up openstack
 ```
 
 # DESCRIPTION
