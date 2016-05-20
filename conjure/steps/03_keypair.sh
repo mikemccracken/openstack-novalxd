@@ -8,9 +8,9 @@
 if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
 
     if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-        debug openstack "(post) adding keypair"
+        debug "(post) adding keypair"
         if ! ssh-keygen -N '' -f $HOME/.ssh/id_rsa; then
-            debug openstack "(post) Error attempting to create $HOME/.ssh/id_rsa.pub to be added OpenStack"
+            debug "(post) Error attempting to create $HOME/.ssh/id_rsa.pub to be added OpenStack"
         fi
 
     fi
