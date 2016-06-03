@@ -3,9 +3,9 @@
 . /usr/share/conjure-up/hooklib/common.sh
 
 if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
-    debug "(pre) processing lxd"
 
     profilename=$(juju switch | cut -d: -f2)
+    debug "(pre) processing lxd - profile: $profilename"
     sed "s/##MODEL##/juju-$profilename/" $SCRIPTPATH/lxd-profile.yaml | lxc profile edit "juju-$profilename"
 
     RET=$?
