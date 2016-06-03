@@ -6,7 +6,7 @@ if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
 
     profilename=$(juju switch | cut -d: -f2)
     debug "(pre) processing lxd - profile: $profilename"
-    sed "s/##MODEL##/juju-$profilename/" $SCRIPTPATH/lxd-profile.yaml | lxc profile edit "juju-$profilename"
+    sed "s/##MODEL##/$profilename/" $SCRIPTPATH/lxd-profile.yaml | lxc profile edit "juju-$profilename"
 
     RET=$?
     if [ $RET -ne 0 ]; then
