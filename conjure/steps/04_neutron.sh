@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Description: Configure Neutron
+# Title: Configure Neutron
 
 . /usr/share/conjure-up/hooklib/common.sh
 
