@@ -5,16 +5,16 @@
 if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
 
     profilename=$(juju switch | cut -d: -f2)
-    debug "(pre) processing lxd - profile: $profilename"
+    debug "processing lxd - profile: $profilename"
     sed "s/##MODEL##/$profilename/" $SCRIPTPATH/lxd-profile.yaml | lxc profile edit "juju-$profilename"
 
     RET=$?
     if [ $RET -ne 0 ]; then
-        exposeResult "(pre) Failed to update lxd profile" $RET "false"
+        exposeResult "Failed to update lxd profile: $profilename" $RET "false"
     else
-        exposeResult "(pre) Complete" 0 "true"
+        exposeResult "Complete" 0 "true"
     fi
 
 fi
 
-exposeResult "Finished pre-processing..." 0 "true"
+exposeResult "Finished post bootstrap tasks..." 0 "true"
