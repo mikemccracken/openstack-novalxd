@@ -11,7 +11,6 @@ services=("keystone" \
               "ceph-mon" \
               "ceph-osd" \
               "ceph-radosgw" \
-              "cinder" \
               "mysql" \
               "nova-cloud-controller" \
               "nova-compute" \
