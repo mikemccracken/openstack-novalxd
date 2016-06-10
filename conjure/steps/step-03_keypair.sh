@@ -12,7 +12,6 @@ if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
             while ! openstack keypair create --public-key $HOME/.ssh/id_rsa.pub ubuntu-keypair > /dev/null 2>&1; do sleep 5; done
             exposeResult "Added SSH Keypair" 0 "true"
         fi
-    else
-        exposeResult "Unable to add public ssh key, maybe ssh-keygen needs to be run." 1 "false"
     fi
+    exposeResult "Unable to add public ssh key, maybe ssh-keygen needs to be run." 1 "false"
 fi
