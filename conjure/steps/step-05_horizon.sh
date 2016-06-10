@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# Title: Configuring Horizon
 
 . /usr/share/conjure-up/hooklib/common.sh
 

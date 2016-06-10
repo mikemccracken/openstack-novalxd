@@ -1,2 +1,9 @@
 title: SSH
 description: Import ssh keys
+viewable: True
+required: True
+additional-input:
+  - label: Location of your existing SSH public key
+    key: SSHPUBLICKEY
+    type: text
+    default: ~/.ssh/id_rsa.pub
