@@ -1,26 +1,48 @@
-#!/bin/bash
-#
-# Validate applications are started
+#!/usr/bin/env python3
 
-. /usr/share/conjure-up/hooklib/common.sh
+from subprocess import run, PIPE
+import yaml
+import json
+import sys
 
-services=("keystone" \
-              "glance" \
-              "neutron-api" \
-              "neutron-gateway" \
-              "ceph-mon" \
-              "ceph-osd" \
-              "ceph-radosgw" \
-              "mysql" \
-              "nova-cloud-controller" \
-              "nova-compute" \
-              "openstack-dashboard" \
-              "rabbitmq-server")
 
-checkUnitsForErrors $services
+def status():
+    """ Get juju status
+    """
+    sh = run('juju status --format yaml', shell=True, stdout=PIPE)
+    return yaml.load(sh.stdout.decode())
 
-if [ $(unitStatus nova-cloud-controller 0) != "active" ]; then
-    exposeResult "OpenStack not ready yet" 0 "false"
-fi
 
-exposeResult "Applications ready" 0 "true"
+def main():
+    juju_status = status()
+    agent_states = []
+    for k, v in juju_status['applications'].items():
+        if 'units' in v:
+            for unit in v['units']:
+                agent_states.append(unit['workload-status']['current'])
+    if any([state == 'error' for state in agent_states]):
+        print(json.dump({
+            'message': 'Error in one of the applications deployment',
+            'returnCode': 1,
+            'isComplete': False
+        }))
+        return 0
+
+    if all([state == 'active' for state in agent_states]):
+        print(json.dump({
+            'message': 'Applications ready',
+            'returnCode': 0,
+            'isComplete': True
+        }))
+        return 0
+
+    print(json.dump({
+        'message': 'Applications not ready yet',
+        'returnCode': 0,
+        'isComplete': False
+    }))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
