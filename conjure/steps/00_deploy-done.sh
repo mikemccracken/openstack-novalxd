@@ -18,6 +18,9 @@ services=("keystone" \
               "rabbitmq-server")
 
 checkUnitsForErrors $services
-checkUnitsForActive $services
+
+if [ $(unitStatus nova-cloud-controller 0) != "active" ]; then
+    exposeResult "OpenStack not ready yet" 0 "false"
+fi
 
 exposeResult "Applications ready" 0 "true"

@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# Title: Import Glance Images
 
 . /usr/share/conjure-up/hooklib/common.sh
 
