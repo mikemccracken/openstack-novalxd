@@ -25,6 +25,15 @@ def main():
         errs = "\n".join(["{}: {}".format(n, m) for n, m in errored_units])
         error('Deployment errors:\n{}'.format(errs))
 
+    machines = [(name, md['juju-status'].get('current', ''),
+                 md['juju-status'].get('message', ''))
+                for name, md in juju_status.get('machines',  {}).items()]
+    errored_machines = [(name, err) for name, status, err in machines
+                        if status == "error"]
+    if len(errored_machines) > 0:
+        errs = "\n".join(["{}: {}".format(n, m) for n, m in errored_machines])
+        error("Machine creation errors:\n{}".format(errs))
+
     if all([state == 'active' for state in agent_states]):
         success('Applications are ready')
 
