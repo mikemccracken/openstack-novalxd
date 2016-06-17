@@ -13,13 +13,17 @@ def main():
     log.debug("Running deploy-done for OpenStack installation.")
     juju_status = juju.status()
     agent_states = []
-    for k, v in juju_status['applications'].items():
-        if 'units' in v:
-            for unit in v['units']:
-                unit = v['units'][unit]['workload-status']['current']
-                agent_states.append(unit)
-    if any([state == 'error' for state in agent_states]):
-        error('Error in one of the applications deployment')
+    for app_name, app_dict in juju_status['applications'].items():
+        for unit_name, unit_dict in app_dict.get('units', {}).items():
+            cur_state = unit_dict['workload-status']['current']
+            message = unit_dict['workload-status']['message']
+            agent_states.append((unit_name, cur_state, message))
+
+    errored_units = [(unit_name, message) for unit_name, state, message
+                     in agent_states if state == "error"]
+    if len(errored_units) > 0:
+        errs = ",".join(["{}: {}".format(n, m) for n, m in errored_units])
+        error('Deployment errors: {}'.format(errs))
 
     if all([state == 'active' for state in agent_states]):
         success('Applications are ready')
