@@ -3,5 +3,6 @@
     "cloud-whitelist": [
         "localhost",
         "maas"
-    ]
+    ],
+    "packages": ["openstack"]
 }
