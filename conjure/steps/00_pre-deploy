@@ -20,18 +20,22 @@ def main():
 
     log.debug("Processing lxd profile: {}".format(
         profilename.stdout.decode().strip()))
-    profile_edit = run('sed "s/##MODEL##/$profilename/" '
-                       '$SCRIPTPATH/lxd-profile.yaml | '
-                       'lxc profile edit "juju-$profilename"',
-                       shell=True,
-                       stdout=PIPE,
-                       stderr=PIPE)
+    profile_edit = run(
+        'sed "s/##MODEL##/{}/" '
+        '$SCRIPTPATH/lxd-profile.yaml | '
+        'lxc profile edit "juju-$profilename"'.format(profilename),
+        shell=True,
+        stdout=PIPE,
+        stderr=PIPE)
 
     log.debug(profile_edit.stderr)
     log.debug(profile_edit.stdout)
     log.debug(profile_edit)
 
-    error("Failure")
+    if profile_edit.returncode > 0:
+        error(profile_edit.stderr)
+
+    success("Updated LXD profile.")
 
 if __name__ == "__main__":
-   main()
+    main()
