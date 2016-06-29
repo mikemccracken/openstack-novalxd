@@ -1,20 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-. /usr/share/conjure-up/hooklib/common.sh
+import sys
+import os
+from subprocess import run, PIPE
 
-if [[ $JUJU_PROVIDERTYPE =~ "lxd" ]]; then
+# Conjure-up specific
+sys.path.insert(0, '/usr/share/conjure-up/hooklib')
+import juju  # noqa
+from writer import log, success, fail, error  # noqa
 
-    profilename=$(juju switch | cut -d: -f2)
-    debug "processing lxd - profile: $profilename"
-    sed "s/##MODEL##/$profilename/" $SCRIPTPATH/lxd-profile.yaml | lxc profile edit "juju-$profilename"
 
-    RET=$?
-    if [ $RET -ne 0 ]; then
-        exposeResult "Failed to update lxd profile: $profilename" $RET "false"
-    else
-        exposeResult "Complete" 0 "true"
-    fi
+def main():
+    provider_type = os.environ.get('JUJU_PROVIDERTYPE', None)
 
-fi
+    if provider_type == "lxd":
+        log.debug("Running pre-deploy for OpenStack")
 
-exposeResult "Finished post bootstrap tasks..." 0 "true"
+    profilename = run('juju switch | cut -d: -f2', shell=True, stdout=PIPE)
+
+    log.debug("Processing lxd profile: {}".format(
+        profilename.stdout.decode().strip()))
+    profile_edit = run('sed "s/##MODEL##/$profilename/" '
+                       '$SCRIPTPATH/lxd-profile.yaml | '
+                       'lxc profile edit "juju-$profilename"',
+                       shell=True,
+                       stdout=PIPE,
+                       stderr=PIPE)
+
+    log.debug(profile_edit.stderr)
+    log.debug(profile_edit.stdout)
+    log.debug(profile_edit)
+
+    error("Failure")
+
+if __name__ == "__main__":
+   main()
