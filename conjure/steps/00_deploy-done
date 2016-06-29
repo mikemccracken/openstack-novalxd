@@ -11,13 +11,7 @@ from writer import log, success, fail, error  # noqa
 
 def main():
     log.debug("Running deploy-done for OpenStack installation.")
-    juju_status = juju.status()
-    agent_states = []
-    for app_name, app_dict in juju_status['applications'].items():
-        for unit_name, unit_dict in app_dict.get('units', {}).items():
-            cur_state = unit_dict['workload-status']['current']
-            message = unit_dict['workload-status']['message']
-            agent_states.append((unit_name, cur_state, message))
+    agent_states = juju.agent_states()
 
     errored_units = [(unit_name, message) for unit_name, state, message
                      in agent_states if state == "error"]
@@ -25,9 +19,7 @@ def main():
         errs = "\n".join(["{}: {}".format(n, m) for n, m in errored_units])
         error('Deployment errors:\n{}'.format(errs))
 
-    machines = [(name, md['juju-status'].get('current', ''),
-                 md['juju-status'].get('message', ''))
-                for name, md in juju_status.get('machines',  {}).items()]
+    machines = juju.machine_states()
     errored_machines = [(name, err) for name, status, err in machines
                         if status == "error"]
     if len(errored_machines) > 0:
