@@ -2,7 +2,7 @@
 
 import sys
 import os
-from subprocess import run, PIPE
+from subprocess import run, PIPE, CalledProcessError
 
 # Conjure-up specific
 sys.path.insert(0, '/usr/share/conjure-up/hooklib')
@@ -23,14 +23,18 @@ def main():
 
         log.debug("Processing lxd profile: {}".format(profilename))
 
-        profile_edit = run(
-            'sed "s/##MODEL##/{profile}/" '
-            '{scriptpath}/lxd-profile.yaml | '
-            'lxc profile edit "juju-{profile}"'.format(profile=profilename,
-                                                       scriptpath=SCRIPTPATH),
-            shell=True,
-            stdout=PIPE,
-            stderr=PIPE)
+        try:
+            profile_edit = run(
+                'sed "s/##MODEL##/{profile}/" '
+                '{scriptpath}/lxd-profile.yaml | '
+                'lxc profile edit "juju-{profile}"'.format(
+                    profile=profilename,
+                    scriptpath=SCRIPTPATH),
+                shell=True,
+                stdout=PIPE,
+                stderr=PIPE)
+        except CalledProcessError as e:
+            error(e)
 
         if profile_edit.returncode > 0:
             error(profile_edit.stderr)
