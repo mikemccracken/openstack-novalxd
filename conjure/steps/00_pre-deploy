@@ -18,8 +18,14 @@ def main():
     if provider_type == "lxd":
         log.debug("Running pre-deploy for OpenStack")
 
-        profilename = run('juju switch | cut -d: -f2', shell=True, stdout=PIPE)
-        profilename = profilename.stdout.decode().strip()
+        try:
+            profilename = run('juju switch | cut -d: -f2',
+                              shell=True,
+                              stdout=PIPE,
+                              stderr=PIPE)
+            profilename = profilename.stdout.decode().strip()
+        except CalledProcessError as e:
+            error(e)
 
         log.debug("Processing lxd profile: {}".format(profilename))
 
