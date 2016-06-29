@@ -4,7 +4,7 @@
 
 . $SCRIPTPATH/novarc
 
-if [ ! -f $SSHPUBLICKEY ]; then
+if [ -f $SSHPUBLICKEY ]; then
     debug "Adding ssh public key $SSHPUBLICKEY"
     . $SCRIPTPATH/novarc
     if ! openstack keypair show ubuntu-keypair > /dev/null 2>&1; then
