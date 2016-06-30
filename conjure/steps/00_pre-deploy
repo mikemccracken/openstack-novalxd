@@ -2,6 +2,7 @@
 
 import sys
 import os
+import time
 from subprocess import run, PIPE, CalledProcessError
 
 # Conjure-up specific
@@ -17,7 +18,8 @@ def main():
 
     if provider_type == "lxd":
         log.debug("Running pre-deploy for OpenStack")
-
+        # Give LXD enough time to learn about the profile
+        time.sleep(5)
         try:
             profilename = run('juju switch | cut -d: -f2',
                               shell=True,
