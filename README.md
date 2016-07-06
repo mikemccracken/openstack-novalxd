@@ -1,12 +1,8 @@
 # synopsis
 
-```
-$ conjure-up openstack
-
-# or
-
-$ conjure-up ~spells/openstack-novalxd
-```
+    $ conjure-up openstack
+    # or
+    $ conjure-up ~spells/openstack-novalxd
 
 # authors
 
