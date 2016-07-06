@@ -1,14 +1,21 @@
-# SYNOPSIS
+# synopsis
 
 ```
-conjure-up openstack
+$ conjure-up openstack
+
+# or
+
+$ conjure-up ~spells/openstack-novalxd
 ```
 
-# COPYRIGHT
+# authors
 
-- 2016 Canonical, Ltd.
-- 2016 Adam Stokes <adam.stokes@ubuntu.com>
+- Adam Stokes <adam.stokes@ubuntu.com>
 
-# LICENSE
+# copyright
+
+2016 Canonical, Ltd.
+
+# license
 
 MIT
