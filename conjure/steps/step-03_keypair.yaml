@@ -3,7 +3,7 @@ description: Import ssh keys
 viewable: True
 required: True
 additional-input:
-  - label: Location of your existing SSH public key (absolute path required)
+  - label: Location of your existing SSH public key
     key: SSHPUBLICKEY
     type: text
-    default: /home/ubuntu/.ssh/id_rsa.pub
+    default: ~/.ssh/id_rsa.pub
