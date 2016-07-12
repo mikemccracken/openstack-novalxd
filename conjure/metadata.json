@@ -1,8 +1,7 @@
 {
     "friendly-name": "OpenStack with NovaLXD",
     "cloud-whitelist": [
-        "localhost",
-        "maas"
+        "localhost"
     ],
     "packages": ["openstack"]
 }
