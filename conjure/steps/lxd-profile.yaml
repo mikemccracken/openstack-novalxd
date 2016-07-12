@@ -17,9 +17,6 @@ devices:
     nictype: bridged
     parent: openstack0
     type: nic
-  kvm:
-    path: /dev/kvm
-    type: unix-char
   mem:
     path: /dev/mem
     type: unix-char
