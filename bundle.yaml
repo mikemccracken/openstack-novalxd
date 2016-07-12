@@ -1,3 +1,16 @@
+machines:
+  '0':
+    constraints: arch=amd64
+    series: xenial
+  '1':
+    constraints: arch=amd64
+    series: xenial
+  '2':
+    constraints: arch=amd64
+    series: xenial
+  '3':
+    constraints: arch=amd64
+    series: xenial
 relations:
 - - nova-compute:amqp
   - rabbitmq-server:amqp
@@ -63,42 +76,62 @@ services:
     options:
       fsid: 5a791d94-980b-11e4-b6f6-3c970e8b1cf7
       monitor-secret: AQAi5a9UeJXUExAA+By9u+GPhl8/XiUQ4nwI3A==
+    to:
+    - lxc:1
+    - lxc:2
+    - lxc:3
   ceph-osd:
     charm: cs:xenial/ceph-osd
     num_units: 3
     options:
       osd-devices: /srv/osd
       use-direct-io: False
+    to:
+    - '1'
+    - '2'
+    - '3'
   ceph-radosgw:
     charm: cs:xenial/ceph-radosgw
     num_units: 1
     options:
       use-embedded-webserver: true
+    to:
+    - lxc:0
   glance:
     charm: cs:xenial/glance
     num_units: 1
+    to:
+    - lxc:2
   keystone:
     charm: cs:xenial/keystone
     num_units: 1
     options:
       admin-password: openstack
+    to:
+    - lxc:3
   mysql:
     charm: cs:xenial/percona-cluster
     num_units: 1
     options:
       max-connections: 20000
       dataset-size: 256M
+    to:
+    - lxc:0
   neutron-api:
     charm: cs:xenial/neutron-api
     num_units: 1
     options:
       neutron-security-groups: true
       overlay-network-type: "gre vxlan"
+    to:
+    - lxc:1
   neutron-gateway:
     charm: cs:xenial/neutron-gateway
     num_units: 1
     options:
       ext-port: eth1
+    to:
+    - '0'
   neutron-openvswitch:
     charm: cs:xenial/neutron-openvswitch
     num_units: 0
@@ -107,6 +140,8 @@ services:
     num_units: 1
     options:
       network-manager: Neutron
+    to:
+    - lxc:2
   nova-compute:
     charm: cs:xenial/nova-compute
     num_units: 1
@@ -114,6 +149,10 @@ services:
       enable-live-migration: False
       enable-resize: False
       virt-type: lxd
+    to:
+    - '1'
+    - '2'
+    - '3'
   ntp:
     charm: cs:xenial/ntp
     num_units: 0
@@ -124,9 +163,13 @@ services:
   openstack-dashboard:
     charm: cs:xenial/openstack-dashboard
     num_units: 1
+    to:
+    - lxc:3
   rabbitmq-server:
     charm: cs:xenial/rabbitmq-server
     num_units: 1
+    to:
+    - lxc:0
 tags:
   - conjure-openstack
 description: |
