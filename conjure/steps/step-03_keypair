@@ -34,7 +34,7 @@ def main():
     ssh_privkey = path.join(path.expanduser('~/.ssh'),
                             path.splitext(ssh_pubkey)[0])
 
-    if not ssh_privkey:
+    if not path.isfile(ssh_privkey):
         log.debug("No ssh private key found, generating our own.")
         ssh_genkey(ssh_privkey)
 
