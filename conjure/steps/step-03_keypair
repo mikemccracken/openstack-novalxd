@@ -31,7 +31,8 @@ def main():
     ssh_pubkey = path.expanduser(os.environ.get(
         'SSHPUBLICKEY',
         path.expanduser('~/.ssh/id_rsa.pub')))
-    ssh_privkey = path.splitext(ssh_pubkey)[0]
+    ssh_privkey = path.join(path.expanduser('~/.ssh'),
+                            path.splitext(ssh_pubkey)[0])
 
     if not ssh_privkey:
         log.debug("No ssh private key found, generating our own.")
