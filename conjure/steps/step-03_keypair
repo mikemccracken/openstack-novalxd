@@ -16,12 +16,26 @@ SCRIPTPATH = path.dirname(path.abspath(__file__))
 NOVARC = path.join(SCRIPTPATH, 'novarc')
 
 
+def ssh_genkey(ssh_privkey):
+    """ Generates sshkey
+    """
+    cmd = "ssh-keygen -N '' -f {0}".format(ssh_privkey)
+    out = run(cmd, shell=True, stdout=DEVNULL, stderr=PIPE)
+    if out.returncode != 0:
+            fail("Unable to generate key: {0}".format(out.stderr.decode()))
+
+
 def main():
     credentials = utils.parse_openstack_creds(NOVARC)
 
     ssh_pubkey = path.expanduser(os.environ.get(
         'SSHPUBLICKEY',
         path.expanduser('~/.ssh/id_rsa.pub')))
+    ssh_privkey = path.splitext(ssh_pubkey)[0]
+
+    if not ssh_privkey:
+        log.debug("No ssh private key found, generating our own.")
+        ssh_genkey(ssh_privkey)
 
     log.debug("Checking for ssh public key: {}".format(ssh_pubkey))
     if path.isfile(ssh_pubkey):
@@ -43,9 +57,9 @@ def main():
             fail("Unable to add public ssh key, maybe "
                  "ssh-keygen needs to be run")
         success("SSH Keypair complete")
-    else:
-        fail("Could not find any ssh keys to import, please run "
-             "ssh-keygen in another terminal before re-executing this step.")
+
+    fail("Could not find any ssh keys to import, please run "
+         "ssh-keygen in another terminal before re-executing this step.")
 
 
 if __name__ == "__main__":
