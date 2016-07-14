@@ -1,3 +1,4 @@
 title: Horizon
-description: Displays horizon dashboard URL
+description: |
+  Configure Horizon and generate a URL and credentials to access the dashboard with.
 viewable: True
