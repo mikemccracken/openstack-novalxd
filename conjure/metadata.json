@@ -3,5 +3,6 @@
     "cloud-whitelist": [
         "localhost"
     ],
-    "packages": ["openstack"]
+    "packages": ["openstack"],
+    "options-whitelist": {"mysql": ["max-connections"]}
 }
